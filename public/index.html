@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Tower Defense</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Main Menu Overlay -->
+        <div id="main-menu" class="overlay">
+            <div class="menu-content">
+                <h1>Tower Defense</h1>
+                <button id="btn-play" class="menu-btn">Play</button>
+                <button id="btn-level-select" class="menu-btn">Level Select</button>
+                <button id="btn-how-to-play" class="menu-btn">How to Play</button>
+            </div>
+        </div>
+
+        <!-- Level Select Overlay -->
+        <div id="level-select" class="overlay hidden">
+            <div class="menu-content">
+                <h2>Select Level</h2>
+                <div id="level-grid"></div>
+                <button id="btn-back-menu" class="menu-btn">Back</button>
+            </div>
+        </div>
+
+        <!-- How to Play Overlay -->
+        <div id="how-to-play" class="overlay hidden">
+            <div class="menu-content">
+                <h2>How to Play</h2>
+                <div class="instructions">
+                    <p><strong>Aim & Shoot:</strong> Move mouse/touch to aim, hold to fire</p>
+                    <p><strong>Place Towers:</strong> Click tower buttons or press 1-4</p>
+                    <p><strong>Tower Types:</strong></p>
+                    <ul>
+                        <li><span class="tower-icon basic"></span> Basic - Balanced (100g)</li>
+                        <li><span class="tower-icon sniper"></span> Sniper - Long range (200g)</li>
+                        <li><span class="tower-icon splash"></span> Splash - Area damage (175g)</li>
+                        <li><span class="tower-icon slow"></span> Slow - Slows enemies (125g)</li>
+                    </ul>
+                    <p><strong>Upgrade/Sell:</strong> Click a tower, then U to upgrade or S to sell</p>
+                    <p><strong>Pause:</strong> Press Space</p>
+                </div>
+                <button id="btn-back-menu2" class="menu-btn">Back</button>
+            </div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div id="pause-menu" class="overlay hidden">
+            <div class="menu-content">
+                <h2>Paused</h2>
+                <button id="btn-resume" class="menu-btn">Resume</button>
+                <button id="btn-restart" class="menu-btn">Restart</button>
+                <button id="btn-quit" class="menu-btn">Quit to Menu</button>
+            </div>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="game-over" class="overlay hidden">
+            <div class="menu-content">
+                <h2 id="game-over-title">Game Over</h2>
+                <p id="game-over-message"></p>
+                <div id="stars-display"></div>
+                <button id="btn-retry" class="menu-btn">Retry</button>
+                <button id="btn-next-level" class="menu-btn hidden">Next Level</button>
+                <button id="btn-menu" class="menu-btn">Main Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load game scripts -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
