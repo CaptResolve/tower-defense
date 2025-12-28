@@ -156,9 +156,8 @@ export class UI {
             ctx.lineWidth = isSelected ? 3 : 2;
             ctx.strokeRect(btn.x, btn.y, btn.w, btn.h);
 
-            // Tower icon (simple colored square)
-            ctx.fillStyle = canAfford ? this.towerColors[btn.type] : '#666';
-            ctx.fillRect(btn.x + 10, btn.y + 8, 30, 20);
+            // Draw mini tower icon
+            this.renderMiniTower(ctx, btn.x + btn.w / 2, btn.y + 22, btn.type, canAfford);
 
             // Cost
             ctx.fillStyle = canAfford ? '#fff' : '#888';
@@ -172,6 +171,95 @@ export class UI {
             ctx.textAlign = 'right';
             ctx.fillText(btn.key, btn.x + btn.w - 5, btn.y + 12);
         }
+    }
+
+    renderMiniTower(ctx, x, y, type, enabled) {
+        ctx.save();
+        ctx.translate(x, y);
+
+        const color = enabled ? this.towerColors[type] : '#666';
+        const darkColor = enabled ? this.darkenColor(this.towerColors[type]) : '#444';
+
+        if (type === 'basic') {
+            // Guard tower - simple castle tower
+            ctx.fillStyle = darkColor;
+            ctx.fillRect(-10, 2, 20, 6);
+            ctx.fillStyle = color;
+            ctx.fillRect(-8, -12, 16, 16);
+            // Crenellations
+            ctx.fillRect(-10, -15, 5, 4);
+            ctx.fillRect(5, -15, 5, 4);
+            // Window
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(-2, -8, 4, 6);
+        } else if (type === 'sniper') {
+            // Watchtower - tall thin tower
+            ctx.fillStyle = darkColor;
+            ctx.fillRect(-8, 2, 16, 6);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(-6, 5);
+            ctx.lineTo(-4, -15);
+            ctx.lineTo(4, -15);
+            ctx.lineTo(6, 5);
+            ctx.closePath();
+            ctx.fill();
+            // Pointed roof
+            ctx.fillStyle = '#4a3728';
+            ctx.beginPath();
+            ctx.moveTo(-5, -15);
+            ctx.lineTo(0, -22);
+            ctx.lineTo(5, -15);
+            ctx.closePath();
+            ctx.fill();
+        } else if (type === 'splash') {
+            // Siege tower - catapult
+            ctx.fillStyle = darkColor;
+            ctx.fillRect(-12, 0, 24, 8);
+            ctx.fillStyle = color;
+            ctx.fillRect(-10, -8, 20, 10);
+            // Catapult arm
+            ctx.fillStyle = '#5c4033';
+            ctx.save();
+            ctx.rotate(-0.4);
+            ctx.fillRect(-2, -18, 4, 14);
+            // Bucket
+            ctx.fillStyle = '#ff6b35';
+            ctx.beginPath();
+            ctx.arc(0, -20, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        } else if (type === 'slow') {
+            // Mage tower - round with crystal
+            ctx.fillStyle = darkColor;
+            ctx.beginPath();
+            ctx.ellipse(0, 4, 10, 4, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = color;
+            ctx.fillRect(-8, -10, 16, 16);
+            ctx.beginPath();
+            ctx.ellipse(0, -10, 8, 3, 0, 0, Math.PI * 2);
+            ctx.fill();
+            // Crystal
+            ctx.fillStyle = '#88ccff';
+            ctx.beginPath();
+            ctx.moveTo(0, -20);
+            ctx.lineTo(-4, -12);
+            ctx.lineTo(0, -10);
+            ctx.lineTo(4, -12);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        ctx.restore();
+    }
+
+    darkenColor(hex) {
+        const num = parseInt(hex.slice(1), 16);
+        const r = Math.max(0, (num >> 16) - 40);
+        const g = Math.max(0, ((num >> 8) & 0x00FF) - 40);
+        const b = Math.max(0, (num & 0x0000FF) - 40);
+        return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
     }
 
     renderWaveInfo(ctx, game) {

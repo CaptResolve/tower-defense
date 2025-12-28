@@ -1,6 +1,6 @@
 // Renderer.js - Natural terrain canvas rendering utilities
 
-import { TILE_SIZE } from './Game.js';
+import { TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from './Game.js';
 
 export class Renderer {
     constructor() {
@@ -19,11 +19,43 @@ export class Renderer {
             grassBlend: '#5a7a4a'
         };
 
-        // Cache for path edge grass
-        this.pathGrassCache = null;
+        // Cached path canvas (rendered once per level)
+        this.pathCanvas = null;
+        this.pathCtx = null;
+        this.cachedPath = null;
+    }
+
+    // Initialize path cache for a new level
+    initPathCache(path) {
+        if (!this.pathCanvas) {
+            this.pathCanvas = document.createElement('canvas');
+            this.pathCanvas.width = GAME_WIDTH;
+            this.pathCanvas.height = GAME_HEIGHT;
+            this.pathCtx = this.pathCanvas.getContext('2d');
+        }
+
+        // Clear and render path to cache
+        this.pathCtx.clearRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        this.renderPathToCache(this.pathCtx, path);
+        this.cachedPath = path;
     }
 
     renderPath(ctx, path) {
+        if (!path || path.length < 2) return;
+
+        // Use cached path if available
+        if (this.pathCanvas && this.cachedPath === path) {
+            ctx.drawImage(this.pathCanvas, 0, 0);
+            return;
+        }
+
+        // Initialize cache if not done yet
+        this.initPathCache(path);
+        ctx.drawImage(this.pathCanvas, 0, 0);
+    }
+
+    // Render path to cache canvas (called once per level)
+    renderPathToCache(ctx, path) {
         if (!path || path.length < 2) return;
 
         ctx.save();
